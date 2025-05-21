@@ -8,7 +8,7 @@ This repository contains data exploration and preprocessing scripts for analyzin
 
 ## 📁 Folder Structure
 
-├── app/ # Streamlit app (dashboard-dev branch)
+├── dashboard/ # Streamlit dashboard (dashboard-dev branch)
 ├── data/ # Cleaned and processed datasets
 │ ├── eda_benin.csv
 │ └── ...
@@ -18,7 +18,7 @@ This repository contains data exploration and preprocessing scripts for analyzin
 ├── README.md # Project documentation (you are here)
 
 
-> ⚠️ Note: The `app/` directory contains the Streamlit dashboard and is under development in the `dashboard-dev` branch. Cleaned datasets live in the `main` branch under `data/`.
+> ⚠️ Note: The `dashboard/` directory contains the Streamlit dashboard and is under development in the `dashboard-dev` branch. Cleaned datasets live in the `main` branch under `data/`.
 
 ---
 
