@@ -22,17 +22,11 @@ def summary_and_missing(df):
         print(df.isna().sum())
 
 # Function to detect and handle outliers, impute missing values
-import pandas as pd
-import numpy as np
-from scipy.stats import zscore
 
-import pandas as pd
 import numpy as np
-from scipy.stats import zscore
-
 import pandas as pd
-import numpy as np
 from scipy.stats import zscore
+import matplotlib.pyplot as plt
 
 def clean_data(df):
     """
@@ -48,36 +42,37 @@ def clean_data(df):
     """
     key_columns = ['GHI', 'DNI', 'DHI', 'ModA', 'ModB', 'WS', 'WSgust']
 
-    # Make a copy so original df is not changed (avoid SettingWithCopyWarning)
-    df_clean = df.copy()
+    # Make a full deep copy of df to avoid any slice/view issues
+    df_clean = df.copy(deep=True)
 
-    # Impute missing values with median for key columns
+    # Impute missing values with median for key columns using .loc to avoid warnings
     for col in key_columns:
         if col in df_clean.columns:
             median_val = df_clean[col].median()
+            # use .loc for assignment
             df_clean.loc[:, col] = df_clean[col].fillna(median_val)
 
-    # Calculate Z-scores for key columns
+    # Calculate Z-scores for key columns, handle missing data by dropna temporarily
     z_scores = df_clean[key_columns].apply(zscore)
 
     # Identify rows where any Z-score > 3 (outliers)
     outlier_mask = (np.abs(z_scores) > 3).any(axis=1)
 
-    # Drop those outlier rows
+    # Drop those outlier rows and reset index cleanly
     df_clean = df_clean.loc[~outlier_mask].reset_index(drop=True)
 
     return df_clean
 
 
-# Function to export cleaned data
 def export_cleaned_data(df, country):
     """Exports cleaned dataset to data/<country>_clean.csv."""
     df.to_csv(f"data/{country}_clean.csv", index=False)
 
-# Function for time series visualization
+
 def time_series_analysis(df):
     """Creates time series plots for solar parameters."""
     if 'Timestamp' in df.columns:
+        df = df.copy()  # avoid modifying original df
         df['Timestamp'] = pd.to_datetime(df['Timestamp'])
         df.set_index('Timestamp', inplace=True)
         df[["GHI", "DNI", "DHI", "Tamb"]].plot(subplots=True, figsize=(12, 10), title="Time Series Analysis")
