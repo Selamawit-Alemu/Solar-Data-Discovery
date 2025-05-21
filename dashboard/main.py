@@ -79,10 +79,3 @@ st.dataframe(summary_df, use_container_width=True)
 st.subheader("Interactive Bubble Chart: GHI vs Temperature")
 utils.plot_bubble_chart(df)
 
-# Key observations
-st.markdown("""
-### Key Observations
-- Country shows highest median GHI but also greatest variability.
-- Differences in solar irradiance are statistically significant based on ANOVA.
-- Temperature and humidity contribute to variations in solar potential.
-""")
