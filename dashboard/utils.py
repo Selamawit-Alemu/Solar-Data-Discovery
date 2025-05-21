@@ -13,9 +13,9 @@ def load_cleaned_data(countries):
     data_frames = []
     
     # Debug output
-    st.write("## Data Loading Debug Info")
-    st.write(f"Current directory: {os.getcwd()}")
-    st.write(f"Data folder contents: {os.listdir(data_folder)}")
+#    st.write("## Data Loading Debug Info")
+#    st.write(f"Current directory: {os.getcwd()}")
+ #   st.write(f"Data folder contents: {os.listdir(data_folder)}")
     
     country_file_map = {
         "Benin": "benin_clean.csv",
