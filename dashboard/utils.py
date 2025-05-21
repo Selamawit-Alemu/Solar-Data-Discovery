@@ -7,38 +7,39 @@ import streamlit as st
 from scipy.stats import f_oneway
 from typing import List, Optional, Union
 
-def load_cleaned_data(countries: List[str]) -> Optional[pd.DataFrame]:
-    """
-    Load cleaned data for selected countries from CSV files in the data folder.
-    
-    Args:
-        countries: List of country names to load data for
-        
-    Returns:
-        Combined DataFrame for all selected countries or None if no data loaded
-    """
+def load_cleaned_data(countries):
     data_frames = []
-    data_folder = "../data"  # Consider making this configurable
+    data_folder = "../data"  # Make this explicit
+    
+    # Debug: Print current working directory
+    st.write(f"Current working directory: {os.getcwd()}")
+    st.write(f"Looking for data in: {os.path.abspath(data_folder)}")
     
     for country in countries:
-        # More robust file path handling
-        file_path = os.path.join(data_folder, f"{country.lower()}_clean.csv")
-        st.session_state.setdefault('debug_messages', []).append(f"Trying to load: {file_path}")
+        file_name = f"{country.lower()}_clean.csv"
+        file_path = os.path.join(data_folder, file_name)
+        
+        # Debug output for each file
+        st.write(f"Attempting to load: {file_path}")
+        st.write(f"File exists: {os.path.exists(file_path)}")
         
         if not os.path.exists(file_path):
-            st.warning(f"Missing data file for {country}: {file_path}")
+            st.error(f"⚠️ Missing file: {file_path}")
             continue
             
         try:
             df = pd.read_csv(file_path)
-            df["Country"] = country  # Ensure consistent country naming
+            df["Country"] = country
             data_frames.append(df)
+            st.success(f"✅ Successfully loaded {country} data")
         except Exception as e:
-            st.error(f"Error loading {file_path}: {str(e)}")
+            st.error(f"❌ Error loading {file_path}: {str(e)}")
             continue
 
     if not data_frames:
-        st.error("No data loaded. Please check your data files.")
+        st.error("No data loaded. Please check:")
+        st.error(f"- Data folder exists at {os.path.abspath(data_folder)}")
+        st.error("- Files follow naming convention: 'countryname_clean.csv'")
         return None
         
     return pd.concat(data_frames, ignore_index=True)
